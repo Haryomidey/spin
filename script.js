@@ -112,15 +112,15 @@
         clearHighlights();
 
         const extra = Math.floor(Math.random() * 360);
-        const turns = 3; // still spins multiple times but faster
+        const turns = 10;
         const target = turns * 360 + extra;
 
-        currentRotation = (currentRotation + target) % 360;
+        currentRotation += target;
 
-        wheelGroup.style.transition = 'transform 1.5s cubic-bezier(0.25, 1, 0.5, 1)';
+        wheelGroup.style.transition = 'transform 2.5s cubic-bezier(0.33, 1, 0.68, 1)';
         wheelGroup.style.transform = `rotate(${currentRotation}deg)`;
 
-        const transitionTimeMs = 1500;
+        const transitionTimeMs = 2500;
         setTimeout(() => {
             const winnerIndex = determineWinningSlice(currentRotation);
             highlightSlice(winnerIndex);
