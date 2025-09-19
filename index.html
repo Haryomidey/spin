@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Spinner</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background: #f4f4f4;
+                font-family: Arial, sans-serif;
+            }
+
+            .spinner-container {
+                position: relative;
+                width: 400px;
+                height: 400px;
+            }
+
+            .spinner {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                border: 5px solid #333;
+                position: relative;
+                overflow: hidden;
+                transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+            }
+
+            .segment {
+                position: absolute;
+                width: 50%;
+                height: 50%;
+                background: #fff;
+                transform-origin: 100% 100%;
+                border: 1px solid #333;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 18px;
+                font-weight: bold;
+                text-align: center;
+                padding: 10px;
+            }
+
+            .pointer {
+                position: absolute;
+                top: -20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 0;
+                border-left: 15px solid transparent;
+                border-right: 15px solid transparent;
+                border-bottom: 30px solid red;
+                z-index: 10;
+            }
+
+            .spin-btn {
+                margin-top: 20px;
+                display: block;
+                padding: 10px 20px;
+                font-size: 18px;
+                cursor: pointer;
+                background: #333;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="spinner-container">
+            <div class="pointer"></div>
+            <div class="spinner" id="spinner"></div>
+            <button class="spin-btn" id="spinBtn">Spin</button>
+        </div>
+
+        <script>
+            const spinner = document.getElementById("spinner");
+            const spinBtn = document.getElementById("spinBtn");
+
+            // Segments labels from your image
+            const segments = [
+                "Death",
+                "500k €",
+                "1 Mio €",
+                "10 Mio €",
+                "100 Mio €",
+                "1 Bil. €",
+                "10 Bil. €"
+            ];
+
+            const segmentAngle = 360 / segments.length;
+
+            // Generate segments dynamically
+            segments.forEach((text, i) => {
+                const seg = document.createElement("div");
+                seg.className = "segment";
+                seg.style.background = i === 0 ? "black" : (i % 2 === 0 ? "#eee" : "#ccc");
+                seg.style.color = i === 0 ? "white" : "black";
+                seg.style.transform = `rotate(${i * segmentAngle}deg) skewY(${90 - segmentAngle}deg)`;
+                seg.innerHTML = `<div style="transform: skewY(-${90 - segmentAngle}deg) rotate(${segmentAngle / 2}deg);">${text}</div>`;
+                spinner.appendChild(seg);
+            });
+
+            let rotation = 0;
+
+            spinBtn.addEventListener("click", () => {
+                const randomSpin = Math.floor(Math.random() * 360) + 360 * 5; // random + multiple spins
+                rotation += randomSpin;
+                spinner.style.transform = `rotate(${rotation}deg)`;
+
+                // Calculate result after spin ends
+                setTimeout(() => {
+                    const normalizedRotation = rotation % 360;
+                    const index = Math.floor((segments.length - normalizedRotation / segmentAngle) % segments.length);
+                    alert("You got: " + segments[index]);
+                }, 4000);
+            });
+        </script>
+    </body>
+</html>
